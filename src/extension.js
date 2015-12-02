@@ -22,7 +22,7 @@ const JSCONFIG =
 const getJsconfigPath = (rootPath)     => path.join(rootPath, FILE_NAME);
 const createCommand   = (jsconfigPath) => [{
     title:     "Create jsconfig.json file",
-    command:   "extension.create.jsconfig.json",
+    command:   "extension.createJsconfig",
     arguments: jsconfigPath
 }];
 
@@ -67,7 +67,7 @@ function fixCommand(jsconfigPath) {
 
 function activate(context) {
 	const disposable = vscode.commands.registerCommand(
-        "extension.create.jsconfig.json", fixCommand);
+        "extension.createJsconfig", fixCommand);
     
     const fixer = vscode.languages.registerCodeActionsProvider(
         "javascript", fixFactory);
