@@ -30,8 +30,6 @@ function hasMissingJsconfigError(diagnostics) {
     for (var i = 0; i < diagnostics.length; i++) {
         var d = diagnostics[i];
         
-        console.log(d.message);
-        
         if (d.code === ERR_CODE && d.message === ERR_MSG) {
             return true;
         }
