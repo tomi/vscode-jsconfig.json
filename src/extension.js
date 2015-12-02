@@ -4,8 +4,7 @@ const vscode    = require("vscode");
 const window    = vscode.window;
 const workspace = vscode.workspace;
 
-const fs   = require("fs");
-const Q    = require("q");
+const fs   = require("./promise-fs");
 const path = require("path");
 
 const ERR_CODE = "-1";
@@ -26,38 +25,6 @@ const createCommand   = (jsconfigPath) => [{
     command:   "extension.create.jsconfig.json",
     arguments: jsconfigPath
 }];
-
-function fileExists(file) {
-    let deferred = Q.defer();
-    
-    fs.stat(file, function (error, stat) {
-        if (error) {
-            if (error.code === "ENOENT") {
-                deferred.resolve(false);                
-            } else {
-                deferred.reject(error);
-            }
-        } else {
-            deferred.resolve(true);
-        }
-    });
-
-    return deferred.promise;
-}
-
-function writeFile(filename, data) {
-    let deferred = Q.defer();
-
-    fs.writeFile(filename, data, function(error) {
-        if (error) {
-            deferred.reject(error);
-        } else {
-            deferred.resolve();
-        }
-    });
-    
-    return deferred.promise;
-}
 
 function hasMissingJsconfigError(diagnostics) {
     for (var i = 0; i < diagnostics.length; i++) {
@@ -86,7 +53,7 @@ const fixFactory = {
         }
 
         let jsconfigPath = getJsconfigPath(rootPath);
-        return fileExists(jsconfigPath).then((exists) => {
+        return fs.fileExists(jsconfigPath).then((exists) => {
             if (exists) return [];
             else return createCommand(jsconfigPath);
         });
@@ -94,7 +61,7 @@ const fixFactory = {
 };
 
 function fixCommand(jsconfigPath) {
-    writeFile(jsconfigPath, JSCONFIG)
+    fs.writeFile(jsconfigPath, JSCONFIG)
         .then(() => workspace.openTextDocument(jsconfigPath))
         .then((doc) => window.showTextDocument(doc))
         .fail((error) => window.showInformationMessage(`Error while creating ${FILE_NAME}: ${error}`));
