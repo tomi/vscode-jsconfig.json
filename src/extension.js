@@ -19,11 +19,12 @@ const JSCONFIG =
     }
 }`;
 
-const getJsconfigPath = (rootPath)     => path.join(rootPath, FILE_NAME);
-const createCommand   = (jsconfigPath) => [{
+const isFolder        = () => workspace.rootPath !== undefined;
+const getJsconfigPath = () => path.join(workspace.rootPath, FILE_NAME);
+
+const createCommand = (jsconfigPath) => [{
     title:     "Create jsconfig.json file",
-    command:   "extension.createJsconfig",
-    arguments: jsconfigPath
+    command:   "extension.createJsconfig"
 }];
 
 function hasMissingJsconfigError(diagnostics) {
@@ -41,16 +42,12 @@ function hasMissingJsconfigError(diagnostics) {
 const fixFactory = {
     provideCodeActions: function(document, range, context, token) {
         if (context.diagnostics.length === 0 ||
-            !hasMissingJsconfigError(context.diagnostics)) {
-            return [];
-        }
-        
-        let rootPath = workspace.rootPath;
-        if (!rootPath) {
+            !hasMissingJsconfigError(context.diagnostics) ||
+            !isFolder) {
             return [];
         }
 
-        let jsconfigPath = getJsconfigPath(rootPath);
+        let jsconfigPath = getJsconfigPath();
         return fs.fileExists(jsconfigPath).then((exists) => {
             if (exists) return [];
             else return createCommand(jsconfigPath);
@@ -58,7 +55,13 @@ const fixFactory = {
     }
 };
 
-function fixCommand(jsconfigPath) {
+function fixCommand() {
+    if (!isFolder()) {
+        window.showErrorMessage(`Cant create ${FILE_NAME}. No folder opened`);
+        return;
+    }
+    
+    const jsconfigPath = getJsconfigPath();
     fs.writeFile(jsconfigPath, JSCONFIG)
         .then(() => workspace.openTextDocument(jsconfigPath))
         .then((doc) => window.showTextDocument(doc))
