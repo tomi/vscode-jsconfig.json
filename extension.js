@@ -1,13 +1,17 @@
 "use strict";
 
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
-var vscode = require('vscode');
-var fs     = require('fs');
-var path   = require("path");
+const vscode    = require("vscode");
+const window    = vscode.window;
+const workspace = vscode.workspace;
+
+const fs   = require("fs");
+const Q    = require("q");
+const path = require("path");
+
+const ERR_CODE = "-1";
+const ERR_MSG  = "This can only be used with ES6. Make sure to have a jsconfig.json-file which sets the target to ES6.";
 
 const FILE_NAME = "jsconfig.json";
-
 const JSCONFIG =
 `{
     "compilerOptions": {
@@ -16,26 +20,52 @@ const JSCONFIG =
     }
 }`;
 
-function getJsconfigPath(root) {
-    return path.join(root, FILE_NAME);
+const getJsconfigPath = (rootPath)     => path.join(rootPath, FILE_NAME);
+const createCommand   = (jsconfigPath) => [{
+    title:     "Create jsconfig.json file",
+    command:   "extension.create.jsconfig.json",
+    arguments: jsconfigPath
+}];
+
+function fileExists(file) {
+    let deferred = Q.defer();
+    
+    fs.stat(file, function (error, stat) {
+        if (error) {
+            if (error.code === "ENOENT") {
+                deferred.resolve(false);                
+            } else {
+                deferred.reject(error);
+            }
+        } else {
+            deferred.resolve(true);
+        }
+    });
+
+    return deferred.promise;
 }
 
-function createFixCommand(rootPath) {
-    return [{
-        title: "Create jsconfig.json file",
-        
-        command: "extension.create.jsconfig.json",
+function writeFile(filename, data) {
+    let deferred = Q.defer();
 
-        arguments: rootPath
-    }];
+    fs.writeFile(filename, data, function(error) {
+        if (error) {
+            deferred.reject(error);
+        } else {
+            deferred.resolve();
+        }
+    });
+    
+    return deferred.promise;
 }
 
 function hasMissingJsconfigError(diagnostics) {
     for (var i = 0; i < diagnostics.length; i++) {
         var d = diagnostics[i];
         
-        if (d.code === "-1" && 
-            d.message.startsWith("This can only be used with ES6")) {
+        console.log(d.message);
+        
+        if (d.code === ERR_CODE && d.message === ERR_MSG) {
             return true;
         }
     }
@@ -43,56 +73,39 @@ function hasMissingJsconfigError(diagnostics) {
     return false;
 }
 
-var fixFactory = {
+const fixFactory = {
     provideCodeActions: function(document, range, context, token) {
         if (context.diagnostics.length === 0 ||
             !hasMissingJsconfigError(context.diagnostics)) {
             return [];
         }
         
-        let rootPath = vscode.workspace.rootPath;
+        let rootPath = workspace.rootPath;
         if (!rootPath) {
             return [];
         }
 
         let jsconfigPath = getJsconfigPath(rootPath);
-        if (fs.existsSync(jsconfigPath)) {
-            return [];
-        }
-
-        return createFixCommand(rootPath);
+        return fileExists(jsconfigPath).then((exists) => {
+            if (exists) return [];
+            else return createCommand(jsconfigPath);
+        });
     }
 };
 
-
-function fixCommand(rootPath) {
-    console.log("Fix activated");
-    
-    let jsconfigPath = getJsconfigPath(rootPath);
-    if (fs.existsSync(jsconfigPath)) {
-        return;
-    }
-    
-    fs.writeFileSync(jsconfigPath, JSCONFIG);
-    
-    vscode.workspace.openTextDocument(jsconfigPath)
-        .then(doc => vscode.window.showTextDocument(doc).then());
+function fixCommand(jsconfigPath) {
+    writeFile(jsconfigPath, JSCONFIG)
+        .then(() => workspace.openTextDocument(jsconfigPath))
+        .then((doc) => window.showTextDocument(doc))
+        .fail((error) => window.showInformationMessage(`Error while creating ${FILE_NAME}: ${error}`));
 }
 
-// this method is called when your extension is activated
-// your extension is activated the very first time the command is executed
 function activate(context) {
-
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "extension-test" is now active!'); 
-
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with  registerCommand
-	// The commandId parameter must match the command field in package.json
-	var disposable = vscode.commands.registerCommand('extension.create.jsconfig.json', fixCommand);
+	const disposable = vscode.commands.registerCommand(
+        "extension.create.jsconfig.json", fixCommand);
     
-    var fixer = vscode.languages.registerCodeActionsProvider("javascript", fixFactory);
+    const fixer = vscode.languages.registerCodeActionsProvider(
+        "javascript", fixFactory);
 
 	context.subscriptions.push(disposable);
 	context.subscriptions.push(fixer);
