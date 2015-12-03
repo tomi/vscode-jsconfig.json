@@ -1,13 +1,25 @@
 # README
-## This is the README for your extension "extension-test" 
-You can author your README using Visual Studio Code.  Here are some useful editor keyboard shortcuts:
 
-* Split the editor (`Cmd+\` on OSX or `Ctrl+\` on Windows and Linux)
-* Toggle preview (`Shift+CMD+V` on OSX or `Shift+Ctrl+V` on Windows and Linux)
-* Press `Ctrl+Space` (Windows, Linux) or `Cmd+Space` (OSX) to see a list of Markdown snippets
+## Create jsconfig.json - Visual Studio Code extension
 
-### For more information
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
+Visual Studio Code has ES6 support, but requires it to be turned on from compiler options defined in jsconfig.json.
+This extension provides an easy way to create the jsconfig.json file.
 
-** Enjoy!**
+## Installation
+
+To install, press `F1` and select `Extensions: Install Extensions` and then search for and select `Create jsconfig.json`.
+
+## Usage
+
+### Command
+
+![Command to create jsconfig.json](images/create-jsconfig-cmd.gif)
+
+### Code action
+
+![How to use the extension](images/create-jsconfig.gif)
+
+## Participate
+
+If you have any ideas, feel free to create issues and pull requests
+
