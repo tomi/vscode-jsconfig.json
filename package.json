@@ -1,7 +1,7 @@
 {
   "name": "create-jsconfig",
   "displayName": "Create jsconfig.json",
-  "description": "Provides a command to create jsconfig.json",
+  "description": "Provides a command and code action to create jsconfig.json with default content",
   "version": "0.1",
   "publisher": "TomiTurtiainen",
   "engines": {
@@ -26,6 +26,15 @@
       }
     ]
   },
+  "repository": {
+      "type": "git",
+      "url": "https://github.com/testtube-/vscode-jsconfig.json.git"
+  },
+  "license": "SEE LICENSE IN LICENSE.md",
+  "bugs": {
+      "url": "https://github.com/testtube-/vscode-jsconfig.json/issues"
+  },
+  "homepage": "https://github.com/testtube-/vscode-jsconfig.json/blob/master/README.md",
   "devDependencies": {
     "vscode": "0.10.x"
   },
