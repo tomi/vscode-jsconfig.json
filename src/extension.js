@@ -11,7 +11,7 @@ const ERR_CODE = "-1";
 const ERR_MSG  = "This can only be used with ES6. Make sure to have a jsconfig.json-file which sets the target to ES6.";
 
 const FILE_NAME = "jsconfig.json";
-const JSCONFIG =
+const FILE_CONTENTS =
 `{
     "compilerOptions": {
         "target": "ES6",
@@ -62,7 +62,7 @@ function fixCommand() {
     }
     
     const jsconfigPath = getJsconfigPath();
-    fs.writeFile(jsconfigPath, JSCONFIG)
+    fs.writeFile(jsconfigPath, FILE_CONTENTS)
         .then(() => workspace.openTextDocument(jsconfigPath))
         .then((doc) => window.showTextDocument(doc))
         .fail((error) => window.showInformationMessage(`Error while creating ${FILE_NAME}: ${error}`));
