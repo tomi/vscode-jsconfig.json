@@ -4,6 +4,7 @@ const vscode    = require("vscode");
 const window    = vscode.window;
 const workspace = vscode.workspace;
 
+const Q    = require("q");
 const fs   = require("./promise-fs");
 const path = require("path");
 
@@ -19,7 +20,7 @@ const FILE_CONTENTS =
     }
 }`;
 
-const isFolder        = () => workspace.rootPath !== undefined;
+const isFolder        = () => workspace.rootPath !== null;
 const getJsconfigPath = () => path.join(workspace.rootPath, FILE_NAME);
 
 const createCommand = (jsconfigPath) => [{
@@ -57,12 +58,19 @@ const fixFactory = {
 
 function fixCommand() {
     if (!isFolder()) {
-        window.showErrorMessage(`Cant create ${FILE_NAME}. No folder opened`);
+        window.showErrorMessage(`Cant create ${FILE_NAME}. No folder opened.`);
         return;
     }
     
     const jsconfigPath = getJsconfigPath();
-    fs.writeFile(jsconfigPath, FILE_CONTENTS)
+    fs.fileExists(jsconfigPath)
+        .then(exists => {
+            if (exists) {
+                return Q(undefined);
+            } else {
+                return fs.writeFile(jsconfigPath, FILE_CONTENTS);
+            }
+        })
         .then(() => workspace.openTextDocument(jsconfigPath))
         .then((doc) => window.showTextDocument(doc))
         .fail((error) => window.showInformationMessage(`Error while creating ${FILE_NAME}: ${error}`));
