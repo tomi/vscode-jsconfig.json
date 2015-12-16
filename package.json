@@ -28,13 +28,13 @@
   },
   "repository": {
       "type": "git",
-      "url": "https://github.com/testtube-/vscode-jsconfig.json.git"
+      "url": "https://github.com/tomi/vscode-jsconfig.json.git"
   },
   "license": "SEE LICENSE IN LICENSE.md",
   "bugs": {
-      "url": "https://github.com/testtube-/vscode-jsconfig.json/issues"
+      "url": "https://github.com/tomi/vscode-jsconfig.json/issues"
   },
-  "homepage": "https://github.com/testtube-/vscode-jsconfig.json/blob/master/README.md",
+  "homepage": "https://github.com/tomi/vscode-jsconfig.json/blob/master/README.md",
   "devDependencies": {
     "vscode": "0.10.x"
   },
