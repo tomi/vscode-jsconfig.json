@@ -1,11 +1,11 @@
 {
   "name": "create-jsconfig",
   "displayName": "Create jsconfig.json",
-  "description": "Provides a command and code action to create jsconfig.json with default content",
-  "version": "0.0.1",
+  "description": "Provides a command to create jsconfig.json with default content",
+  "version": "0.1.0",
   "publisher": "TomiTurtiainen",
   "engines": {
-    "vscode": "^0.10.1"
+    "vscode": "^0.10.5"
   },
   "keywords": [
     "jsconfig.json"
@@ -14,7 +14,6 @@
     "Other"
   ],
   "activationEvents": [
-    "onLanguage:javascript",
     "onCommand:extension.createJsconfig"
   ],
   "main": "./src/extension",

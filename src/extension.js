@@ -8,9 +8,6 @@ const Q    = require("q");
 const fs   = require("./promise-fs");
 const path = require("path");
 
-const ERR_CODE = "-1";
-const ERR_MSG  = "This can only be used with ES6. Make sure to have a jsconfig.json-file which sets the target to ES6.";
-
 const FILE_NAME = "jsconfig.json";
 const FILE_CONTENTS =
 `{
@@ -27,34 +24,6 @@ const createCommand = (jsconfigPath) => [{
     title:     "Create jsconfig.json file",
     command:   "extension.createJsconfig"
 }];
-
-function hasMissingJsconfigError(diagnostics) {
-    for (var i = 0; i < diagnostics.length; i++) {
-        var d = diagnostics[i];
-        
-        if (d.code === ERR_CODE && d.message === ERR_MSG) {
-            return true;
-        }
-    }
-    
-    return false;
-}
-
-const fixFactory = {
-    provideCodeActions: function(document, range, context, token) {
-        if (context.diagnostics.length === 0 ||
-            !hasMissingJsconfigError(context.diagnostics) ||
-            !isFolder) {
-            return [];
-        }
-
-        let jsconfigPath = getJsconfigPath();
-        return fs.fileExists(jsconfigPath).then((exists) => {
-            if (exists) return [];
-            else return createCommand(jsconfigPath);
-        });
-    }
-};
 
 function fixCommand() {
     if (!isFolder()) {
@@ -80,11 +49,7 @@ function activate(context) {
 	const disposable = vscode.commands.registerCommand(
         "extension.createJsconfig", fixCommand);
     
-    const fixer = vscode.languages.registerCodeActionsProvider(
-        "javascript", fixFactory);
-
 	context.subscriptions.push(disposable);
-	context.subscriptions.push(fixer);
 }
 
 exports.activate = activate;
