@@ -17,6 +17,10 @@ To install, press `F1` and select `Extensions: Install Extensions` and then sear
 
 ## Version history
 
+### 0.1.1
+
+Proper error message is shown when trying to create jsconfig file if folder is not open.
+
 ### 0.1.0
 
 As of VS Code version 0.10.5, ES6 is the new default for JavaScript files. Therefore the code action the extension previously provided has been removed as obsolete.

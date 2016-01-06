@@ -17,7 +17,7 @@ const FILE_CONTENTS =
     }
 }`;
 
-const isFolder        = () => workspace.rootPath !== null;
+const isFolder        = () => workspace.rootPath !== null && workspace.rootPath !== undefined;
 const getJsconfigPath = () => path.join(workspace.rootPath, FILE_NAME);
 
 const createCommand = (jsconfigPath) => [{
