@@ -37,6 +37,11 @@
       "url": "https://github.com/tomi/vscode-jsconfig.json/issues"
   },
   "homepage": "https://github.com/tomi/vscode-jsconfig.json/blob/master/README.md",
+  "icon": "images/logo.png",
+  "galleryBanner": {
+    "color": "#ffffff",
+    "theme": "light"
+  },
   "devDependencies": {
     "vscode": "^0.11.0"
   },
