@@ -12,9 +12,11 @@ const FILE_NAME = "jsconfig.json";
 const FILE_CONTENTS =
 `{
     "compilerOptions": {
-        "target": "ES6",
         "module": "commonjs"
-    }
+    },
+	"exclude": [
+		"node_modules"
+	]
 }`;
 
 const isFolder        = () => workspace.rootPath !== null && workspace.rootPath !== undefined;
