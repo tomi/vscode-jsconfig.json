@@ -5,7 +5,10 @@
   "version": "0.1.1",
   "publisher": "TomiTurtiainen",
   "engines": {
-    "vscode": "^0.10.5"
+    "vscode": "^0.10.7"
+  },
+  "scripts": {
+    "postinstall": "node ./node_modules/vscode/bin/install"
   },
   "keywords": [
     "jsconfig.json"
@@ -35,7 +38,7 @@
   },
   "homepage": "https://github.com/tomi/vscode-jsconfig.json/blob/master/README.md",
   "devDependencies": {
-    "vscode": "0.10.x"
+    "vscode": "^0.11.0"
   },
   "dependencies": {
     "q": "^1.4.1"
