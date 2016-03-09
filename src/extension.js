@@ -53,6 +53,9 @@ function fixCommand() {
                 commands.executeCommand("javascript.reloadProjects");
             }
         })
+        .then(() => {
+            window.showInformationMessage(`If you make changes don't forget to execute 'Reload JavaScript Project' command.`);
+        })
         .fail((error) => window.showInformationMessage(`Error while creating ${FILE_NAME}: ${error}`));
 }
 
