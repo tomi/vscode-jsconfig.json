@@ -23,6 +23,7 @@ To install, press `F1` and select `Extensions: Install Extensions` and then sear
   * Removed `target` from compiler options as it's no longer supported.
   * Added `exclude` since explicit list is required from now on.
 * `Reload JavaScript` command is invoked automatically after jsconfig.json is created.
+* Added reminder notification about Reload JavaScript command when jsconfig.json is created.
 
 ### 0.1.1
 
