@@ -1,7 +1,6 @@
 {
 	"compilerOptions": {
 		"module": "commonjs",
-		"target": "ES6",
 		"noLib": true
 	},
 	"exclude": [

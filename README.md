@@ -17,6 +17,14 @@ To install, press `F1` and select `Extensions: Install Extensions` and then sear
 
 ## Version history
 
+### 0.2.0
+
+* Changes to jsconfig.json template after VS Code 0.10.10 changes:
+  * Removed `target` from compiler options as it's no longer supported.
+  * Added `exclude` since explicit list is required from now on.
+* `Reload JavaScript` command is invoked automatically after jsconfig.json is created.
+* Added reminder notification about Reload JavaScript command when jsconfig.json is created.
+
 ### 0.1.1
 
 Proper error message is shown when trying to create jsconfig file if folder is not open.
